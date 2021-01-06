@@ -18,6 +18,19 @@ const user = async (userId) => {
     }
 }
 
+const singleEvent = async (eventId) => {
+    try {
+        const event = await Event.findById(eventId);
+        console.log(event);
+        return {
+            ...event._doc,
+            _id: event.id.toString
+        }
+    }catch(err){
+        throw err;
+    }
+}
+
 //!important
 const events = async (eventIds) => {
     try {
@@ -63,6 +76,25 @@ module.exports = {
                     updatedAt: new Date(booking.updatedAt).toISOString()
                 }
             })
+        }catch(err){
+            throw err;
+        }
+    },
+
+    bookEvent: async (args) => {
+        try {
+            const event = await Event.findById(args.eventId);
+            const booking = new Booking({
+                user: "5ff495dbba3ee9021825c69b",
+                event: event
+            });
+            await booking.save();
+            return {
+                ...booking._doc,
+                _id: booking.id.toString(),
+                createdAt: new Date(booking.createdAt).toISOString(),
+                updatedAt: new Date(booking.updatedAt).toISOString()
+            }
         }catch(err){
             throw err;
         }
