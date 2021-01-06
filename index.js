@@ -11,6 +11,34 @@ require("dotenv").config();
 const Event = require("./models/event");
 const User = require("./models/user");
 
+const user = (userId) => {
+    return User.findById(userId)
+    .then(user => {
+        return { 
+            ...user._doc, 
+            _id: user.id, 
+            createdEvents: events.bind(this, user._doc.createdEvents) 
+        }
+    }).catch(err => {
+        throw err;
+    })
+}
+
+const events = (eventIds) => {
+    return Event.find({_id: {$in: eventIds}})
+    .then(events => {
+        return events.map(event => {
+            return { 
+                ...event._doc, 
+                _id: event.id, 
+                creator: user.bind(this, event.creator) 
+            }
+        })
+    }).catch(err => {
+        throw err;
+    })
+}
+
 const app = express();
 app.use(bodyParser.json());
 
@@ -22,12 +50,14 @@ app.use("/graphql",graphqlHTTP({
             description: String!
             price: Float!
             date: String!
+            creator: User!
         }
 
         type User {
             _id: ID!
             email: String!
             password: String
+            createdEvents: [Event!]
         }
 
         input EventInput {
@@ -57,13 +87,17 @@ app.use("/graphql",graphqlHTTP({
     `),
     rootValue: {
         events: () => {
-            return Event.find((err,events) => {
-                if(!err){
-                    return events.map((event) => {
-                        const results = {...event._doc, _id: event.id.toString(), date: event.date.toISOString()};
-                        return results;
-                    })
-                }
+            return Event.find()
+            .then(events => {
+                return events.map(event => {
+                    return {
+                        ...event._doc,
+                        id: event.id.toString(), 
+                        date: event.date.toISOString(),
+                        creator: user.bind(this, event._doc.creator)
+                    }
+                })
+            }).catch(err => {
                 throw err;
             })
         },
