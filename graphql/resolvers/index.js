@@ -18,6 +18,19 @@ const user = async (userId) => {
     }
 }
 
+const singleEvent = async (eventId) => {
+    try {
+        const event = await Event.findById(eventId);
+        return {
+            ...event._doc,
+            _id: event.id.toString,
+            creator: user.bind(this,event._doc.creator)
+        }
+    }catch(err){
+        throw err;
+    }
+}
+
 //!important
 const events = async (eventIds) => {
     try {
@@ -59,10 +72,51 @@ module.exports = {
                 return {
                     ...booking._doc,
                     _id: booking.id.toString(),
+                    event: singleEvent.bind(this,booking._doc.event),
+                    user: user.bind(this, booking._doc.user),
                     createdAt: new Date(booking.createdAt).toISOString(),
                     updatedAt: new Date(booking.updatedAt).toISOString()
                 }
             })
+        }catch(err){
+            throw err;
+        }
+    },
+
+    bookEvent: async (args) => {
+        try {
+            const event = await Event.findById(args.eventId);
+            const booking = new Booking({
+                user: "5ff495dbba3ee9021825c69b",
+                event: event
+            });
+            await booking.save();
+            return {
+                ...booking._doc,
+                _id: booking.id.toString(),
+                event: singleEvent.bind(this,booking._doc.event),
+                user: user.bind(this,booking._doc.user),
+                createdAt: new Date(booking.createdAt).toISOString(),
+                updatedAt: new Date(booking.updatedAt).toISOString()
+            }
+        }catch(err){
+            throw err;
+        }
+    },
+
+    cancelBooking: async (args) => {
+        try {
+            const booked = await Booking.findOne({_id: args.bookId}).populate("event");
+            if(!booked){
+                throw new Error("booking cannot found");
+            }
+            const event = {
+                ...booked.event._doc,
+                _id: booked.event.id,
+                creator: user.bind(this,booked.event._doc.creator)
+            }
+            await booked.remove();
+            return event;
         }catch(err){
             throw err;
         }
