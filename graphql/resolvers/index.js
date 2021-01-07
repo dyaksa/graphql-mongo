@@ -21,10 +21,10 @@ const user = async (userId) => {
 const singleEvent = async (eventId) => {
     try {
         const event = await Event.findById(eventId);
-        console.log(event);
         return {
             ...event._doc,
-            _id: event.id.toString
+            _id: event.id.toString,
+            creator: user.bind(this,event._doc.creator)
         }
     }catch(err){
         throw err;
@@ -72,6 +72,8 @@ module.exports = {
                 return {
                     ...booking._doc,
                     _id: booking.id.toString(),
+                    event: singleEvent.bind(this,booking._doc.event),
+                    user: user.bind(this, booking._doc.user),
                     createdAt: new Date(booking.createdAt).toISOString(),
                     updatedAt: new Date(booking.updatedAt).toISOString()
                 }
@@ -92,9 +94,29 @@ module.exports = {
             return {
                 ...booking._doc,
                 _id: booking.id.toString(),
+                event: singleEvent.bind(this,booking._doc.event),
+                user: user.bind(this,booking._doc.user),
                 createdAt: new Date(booking.createdAt).toISOString(),
                 updatedAt: new Date(booking.updatedAt).toISOString()
             }
+        }catch(err){
+            throw err;
+        }
+    },
+
+    cancelBooking: async (args) => {
+        try {
+            const booked = await Booking.findOne({_id: args.bookId}).populate("event");
+            if(!booked){
+                throw new Error("booking cannot found");
+            }
+            const event = {
+                ...booked.event._doc,
+                _id: booked.event.id,
+                creator: user.bind(this,booked.event._doc.creator)
+            }
+            await booked.remove();
+            return event;
         }catch(err){
             throw err;
         }
