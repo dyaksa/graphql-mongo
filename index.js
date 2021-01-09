@@ -1,6 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const helmet = require("helmet");
 const { graphqlHTTP } = require("express-graphql");
+const isAuth = require("./middleware/is-auth");
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 require("dotenv").config();
@@ -11,6 +13,8 @@ const graphQlResolvers = require("./graphql/resolvers/index");
 const app = express();
 app.use(bodyParser.json());
 
+// app.use(helmet());
+app.use(isAuth);
 app.use("/graphql",graphqlHTTP({
     schema: graphQlSchema ,
     rootValue: graphQlResolvers,
