@@ -14,7 +14,10 @@ module.exports = {
         }
     },
 
-    createEvent: async (args) => {
+    createEvent: async (args,req) => {
+        if(!req.isAuth){
+            throw new Error("Unauthenticated!");
+        }
         try {
             let createdEvent;
             const event = new Event({
@@ -22,11 +25,11 @@ module.exports = {
                 description: args.eventInput.description,
                 price: args.eventInput.price,
                 date: new Date(),
-                creator: "5ff495dbba3ee9021825c69b"
+                creator: req.userId
             })
             const eventSave = await event.save();
             createdEvent = transformEvent(eventSave);
-            const existsUser = await User.findById("5ff495dbba3ee9021825c69b");
+            const existsUser = await User.findById(req.userId);
             if(!existsUser){
                 throw new Error("user not already exists");
             }
