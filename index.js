@@ -13,7 +13,7 @@ const graphQlResolvers = require("./graphql/resolvers/index");
 const app = express();
 app.use(bodyParser.json());
 
-// app.use(helmet());
+app.use(helmet());
 app.use(isAuth);
 app.use("/graphql",graphqlHTTP({
     schema: graphQlSchema ,
