@@ -1,9 +1,13 @@
 import { Component } from "react";
+import LoginForm from "./components/LoginForm";
+import "./Auth.css";
 
 class Auth extends Component {
     render(){
         return (
-            <h1>this Auth Page</h1>
+            <div id="auth">
+                <LoginForm/>
+            </div>
         )
     }
 }
