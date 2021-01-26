@@ -10,7 +10,7 @@ function App() {
       <Router>
         <>
         <MainNavigation/>
-        <main>
+        <main className="main-content">
           <Switch>
             <Redirect from="/" to="/auth" exact={true}/>
             {routes.map((val,key) => (
