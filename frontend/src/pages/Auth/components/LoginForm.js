@@ -1,5 +1,5 @@
 import "./LoginForm.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
@@ -9,6 +9,10 @@ const LoginForm = (props) => {
     const [isLogin,setIsLogin] = useState(false);
 
     const switchHandler = () => setIsLogin(!isLogin);
+
+    useEffect(() => {
+        console.log(props);
+    },[])
 
     const onSubmit = (data) => {
         const { email,password } = data;
@@ -61,5 +65,6 @@ const LoginForm = (props) => {
         </form>
     )
 }
+
 
 export default LoginForm;

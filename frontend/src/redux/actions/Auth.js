@@ -1,0 +1,4 @@
+export const SET_LOADING = "SET_LOADING";
+export const POST_AUTH = "GET_AUTH";
+export const POST_AUTH_REQUESTED = "GET_AUTH_REQUESTED";
+export const POST_AUTH_FAILED = "GET_AUTH_FAILED";
