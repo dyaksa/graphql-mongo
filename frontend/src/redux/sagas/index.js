@@ -1,8 +1,8 @@
-import { spawn } from "redux-saga/effects";
+import { fork } from "redux-saga/effects";
 
-import authSaga from "./auth-saga";
+import { postAuthWatcher } from "./auth-saga";
 
 export default function* rootSaga(){
     console.log("hello from redux saga");
-    yield spawn(authSaga);
+    yield fork(postAuthWatcher);
 }

@@ -7,19 +7,18 @@ import {
 import { 
     SET_LOADING, 
     POST_AUTH, 
-    POST_AUTH_REQUESTED,
 } from "../actions/Auth";
 
 import { postAuth } from "../api/Auth";
 
-function* postLogin(){
+function* postLogin(action){
     yield put({type: SET_LOADING});
 
-    const auth = yield call(postAuth);
+    const auth = yield call(postAuth, action.payload);
     
     yield put({type: POST_AUTH, payload: auth});
 }
 
-export default function* authSaga(){
-    yield takeLatest(POST_AUTH_REQUESTED, postLogin);
+export function* postAuthWatcher(){
+    yield takeLatest(POST_AUTH, postLogin);
 }

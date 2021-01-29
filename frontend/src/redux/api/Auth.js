@@ -1,19 +1,8 @@
-export const postAuth = async (email,password) => {
+export const postAuth = async (requestData) => {
     try {
-        let requestBody = {
-            query: `
-                query {
-                    login(email: "${email}", password: "${password}"){
-                        _id
-                        token
-                        expiredIn
-                    }
-                }`
-            }
-            
         const res = await fetch('http://localhost:8000/graphql',{
             method: "POST",
-            body: JSON.stringify(requestBody),
+            body: JSON.stringify(requestData),
             headers: {
                 'Content-Type': 'application/json'
             }

@@ -1,18 +1,17 @@
 import "./LoginForm.css";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
+import { postAuthLogin } from "../../../redux/actions/Auth";
 
 const LoginForm = (props) => {
+    const dispatch = useDispatch();
     const { register, handleSubmit, errors } = useForm();
     const [isLogin,setIsLogin] = useState(false);
 
     const switchHandler = () => setIsLogin(!isLogin);
-
-    useEffect(() => {
-        console.log(props);
-    },[])
 
     const onSubmit = (data) => {
         const { email,password } = data;
@@ -38,20 +37,20 @@ const LoginForm = (props) => {
                     }`
                 }
             }
-
-        fetch('http://localhost:8000/graphql',{
-            method: "POST",
-            body: JSON.stringify(requestBody),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(res => {
-            return res.json();
-        }).then(resBody => {
-            console.log(resBody);
-        }).catch(err => {
-            console.log(err)
-        })
+            dispatch(postAuthLogin(requestBody));
+        // fetch('http://localhost:8000/graphql',{
+        //     method: "POST",
+        //     body: JSON.stringify(requestBody),
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     }
+        // }).then(res => {
+        //     return res.json();
+        // }).then(resBody => {
+        //     console.log(resBody);
+        // }).catch(err => {
+        //     console.log(err)
+        // })
     }
 
     return (

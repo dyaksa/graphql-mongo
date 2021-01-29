@@ -1,4 +1,13 @@
 export const SET_LOADING = "SET_LOADING";
-export const POST_AUTH = "GET_AUTH";
-export const POST_AUTH_REQUESTED = "GET_AUTH_REQUESTED";
-export const POST_AUTH_FAILED = "GET_AUTH_FAILED";
+export const POST_AUTH = "POST_AUTH";
+export const POST_AUTH_FAILED = "POST_AUTH_FAILED";
+
+export const postAuthLogin = (data) => ({
+    type: POST_AUTH,
+    payload: data
+})
+
+export const setLoading = () => ({
+    type: SET_LOADING
+})
+
