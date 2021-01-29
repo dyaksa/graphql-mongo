@@ -1,24 +1,23 @@
 import { 
     put, 
     call, 
-    takeLatest, 
+    takeLatest,
 } from "redux-saga/effects";
 
 import { 
-    SET_LOADING, 
-    POST_AUTH, 
+    SET_LOADING,
+    AUTH_REQUESTED, 
+    AUTH_SUCCESS,
 } from "../actions/Auth";
 
 import { postAuth } from "../api/Auth";
 
 function* postLogin(action){
     yield put({type: SET_LOADING});
-
     const auth = yield call(postAuth, action.payload);
-    
-    yield put({type: POST_AUTH, payload: auth});
+    yield put({type: AUTH_SUCCESS, payload: auth});
 }
 
 export function* postAuthWatcher(){
-    yield takeLatest(POST_AUTH, postLogin);
+    yield takeLatest(AUTH_REQUESTED, postLogin);
 }

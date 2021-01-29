@@ -1,9 +1,8 @@
-import { SET_LOADING, POST_AUTH} from "../actions/Auth";
+import { SET_LOADING, AUTH_SUCCESS} from "../actions/Auth";
 
 const initialState = {
     loading: false,
     data: [],
-    error: false
 }
 
 const Auth = (state = initialState, {type,payload}) => {
@@ -13,7 +12,7 @@ const Auth = (state = initialState, {type,payload}) => {
                 ...state,
                 loading: true
             }
-        case POST_AUTH:
+        case AUTH_SUCCESS:
             return {
                 ...state,
                 loading: false,
