@@ -1,10 +1,13 @@
 import "./LoginForm.css";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
+import { LOGIN_REQUESTED, REGISTER_REQUESTED } from "../../../redux/actions/Auth";
 
 const LoginForm = (props) => {
+    const dispatch = useDispatch();
     const { register, handleSubmit, errors } = useForm();
     const [isLogin,setIsLogin] = useState(false);
 
@@ -12,42 +15,11 @@ const LoginForm = (props) => {
 
     const onSubmit = (data) => {
         const { email,password } = data;
-        let requestBody = {
-            query: `
-                query {
-                    login(email: "${email}", password: "${password}"){
-                        _id
-                        token
-                        expiredIn
-                    }
-                }`
-            }
         if(!isLogin){
-            requestBody = {
-                query: `
-                    mutation {
-                        createUser(userInput: {email: "${email}", password: "${password}"}){
-                            _id
-                            email
-                            password
-                        }
-                    }`
-                }
-            }
-
-        fetch('http://localhost:8000/graphql',{
-            method: "POST",
-            body: JSON.stringify(requestBody),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(res => {
-            return res.json();
-        }).then(resBody => {
-            console.log(resBody);
-        }).catch(err => {
-            console.log(err)
-        })
+            dispatch({type: REGISTER_REQUESTED, payload: {email,password}});
+        } else{
+            dispatch({type: LOGIN_REQUESTED,payload: {email,password}});
+        }
     }
 
     return (
@@ -61,5 +33,6 @@ const LoginForm = (props) => {
         </form>
     )
 }
+
 
 export default LoginForm;

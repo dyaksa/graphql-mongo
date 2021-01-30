@@ -1,0 +1,7 @@
+export const SET_LOADING = "SET_LOADING";
+export const LOGIN_REQUESTED = "LOGIN_REQUESTED";
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+export const REGISTER_REQUESTED = "REGISTER_REQUESTED";
+export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
+export const ERROR = "ERROR";
+
