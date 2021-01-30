@@ -1,10 +1,10 @@
 import "./LoginForm.css";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
-import { AUTH_REQUESTED } from "../../../redux/actions/Auth";
+import { LOGIN_REQUESTED, REGISTER_REQUESTED } from "../../../redux/actions/Auth";
 
 const LoginForm = (props) => {
     const dispatch = useDispatch();
@@ -15,29 +15,11 @@ const LoginForm = (props) => {
 
     const onSubmit = (data) => {
         const { email,password } = data;
-        let requestBody = {
-            query: `
-                query {
-                    login(email: "${email}", password: "${password}"){
-                        _id
-                        token
-                        expiredIn
-                    }
-                }`
-            }
         if(!isLogin){
-            requestBody = {
-                query: `
-                    mutation {
-                        createUser(userInput: {email: "${email}", password: "${password}"}){
-                            _id
-                            email
-                            password
-                        }
-                    }`
-                }
-            }
-        dispatch({type: AUTH_REQUESTED,payload: requestBody});
+            dispatch({type: REGISTER_REQUESTED, payload: {email,password}});
+        } else{
+            dispatch({type: LOGIN_REQUESTED,payload: {email,password}});
+        }
     }
 
     return (
