@@ -1,12 +1,16 @@
 import { Auth, Bookings, Events } from "../pages";
-import { Route } from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
+import { useSelector } from "react-redux";
+import _ from "lodash";
 
 const Routes = () => {
+    const { data } = useSelector((s) => s.Auth);
+
     const routes = [
         {
             name: "Auth",
             route: "/auth",
-            component: (props) => <Auth {...props}/>,
+            component: (props) => (!_.isEmpty(data) && data.data.login.token) ? <Redirect to="/events"/> : <Auth {...props}/>,
             isExact: false
         },
         {

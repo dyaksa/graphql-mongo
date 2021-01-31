@@ -1,4 +1,4 @@
-import { SET_LOADING, LOGIN_SUCCESS, REGISTER_SUCCESS, ERROR} from "../actions/Auth";
+import { SET_LOADING, LOGIN_SUCCESS, REGISTER_SUCCESS, ERROR, LOGOUT} from "../actions/Auth";
 
 const initialState = {
     loading: false,
@@ -26,6 +26,17 @@ const Auth = (state = initialState, {type,payload,error}) => {
                 loading: false,
                 data: payload,
                 errors: []
+            }
+        case LOGOUT:
+            return {
+                ...state,
+                loading: false,
+                data: [],
+                errors: [],
+                _persist: {
+                    rehydrated: true,
+                    version: -1
+                }
             }
         case ERROR:
             return {
