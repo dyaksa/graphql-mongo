@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { LOGOUT } from "../../redux/actions/Auth"
 import { isEmpty } from "lodash";
@@ -20,13 +20,23 @@ const MainNavigation = (props) => {
             </div>
             <nav className="main-navigation__item">
                 <ul>
+                    {(isEmpty(data)) && (<li>
+                        <NavLink to="/auth">Auth</NavLink>
+                    </li>) }
                     <li>
-                        {!isEmpty(data) && data.data.login.token 
-                        ? (<button onClick={handleClick}>Logout</button>) 
-                        : (<NavLink to="/auth">Auth</NavLink>)}
+                        <NavLink to="/events">Events</NavLink>
                     </li>
-                    <li><NavLink to="/bookings">Bookings</NavLink></li>
-                    <li><NavLink to="/events">Events</NavLink></li>
+                    {(!isEmpty(data) && data.data.login.token) 
+                    ? (
+                    <>
+                        <li>
+                            <NavLink to="/bookings">Bookings</NavLink>
+                        </li>
+                        <li>
+                            <button className="btn" onClick={handleClick}>Logout</button>
+                        </li>
+                    </>) 
+                    : <Redirect to="/auth"/>}
                 </ul>
             </nav>
         </header>

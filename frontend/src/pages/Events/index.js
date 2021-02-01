@@ -1,9 +1,13 @@
 import { Component } from "react";
+import Button from "../../components/Button";
+import "./Events.css";
 
 class Events extends Component {
     render(){
         return(
-            <h1>This is Events</h1>
+            <div className="event-control">
+                
+            </div>
         )
     }
 }
